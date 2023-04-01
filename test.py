@@ -15,24 +15,26 @@ def make_random_num_list(listLength):
         rList.append(random.randint(0,100))
     return rList
 
-class ProgressTracker():
-    def __init__(self):
+class ProgressTracker:
+    def __init__(self,l):
         self.stopped = False
+        self.list_to_track = l
         self.value = 0
-    
-    def update():
-        for val, i in enumerate (tqdm(l)):
-            if stop_clicked:
+       
+    def update(self):
+        print("update")
+        for val, i in enumerate (tqdm(self.list_to_track)):
+            if not self.stopped:
                 break
-            l[i]+=1
+            list_to_track[i]+=1
             update_value.set(val)
             status_var.set(f"Processing: {val+1}/{l_size}")
             root.update_idletasks()
             time.sleep(0.1)
 
-    def stop_progressbar():
-        global stop_clicked
-        stop_clicked = True
+    def stop(self): 
+        print("stop")
+        self.stopped = True
 
 if __name__ == "__main__":
     print(f"platform: {platform.platform()}")
@@ -41,9 +43,9 @@ if __name__ == "__main__":
     print(f"version: {platform.version()}")
     print(f"machine type: {platform.machine()}")
     print(f"physical cores: {psutil.cpu_count(logical=False)}")
-    
-    stop_clicked = False
+   
     l = make_random_num_list(1000)
+    p = ProgressTracker(l)
     l_size = len(l)
     
     root = tk.Tk()
@@ -69,12 +71,10 @@ if __name__ == "__main__":
     progressbar = ttk.Progressbar(progressFrame, orient="horizontal", length=380, mode="determinate",style='grey.Horizontal.TProgressbar', variable=update_value, maximum=(l_size-1))
     progressbar.grid(row=1, column=0)
 
-    start = ttk.Button(progressFrame,text='start',command=update_progressbar())
+    start = ttk.Button(progressFrame,text='start',command=p.update())
     start.grid(row=2, column=0)
 
-    stop = ttk.Button(progressFrame,text='stop',command=stop_progressbar())
+    stop = ttk.Button(progressFrame,text='stop',command=p.stop())
     stop.grid(row=3, column=0)
 
     root.mainloop()
-
-
