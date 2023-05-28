@@ -12,8 +12,6 @@ from concurrent.futures import ThreadPoolExecutor
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
-import testingfeatures as tfur
-
 
 print(f"platform: {platform.platform()}")
 print(f"system: {platform.system()}")
